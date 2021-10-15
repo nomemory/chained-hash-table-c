@@ -44,11 +44,14 @@ void ch_hash_free(ch_hash *hash) {
         crt = hash->buckets[i];
         while(NULL!=crt) {
             next = crt->next;
+            
             // Free memory for key and value
             hash->key_ops.free(crt->key, hash->key_ops.arg);
             hash->val_ops.free(crt->val, hash->val_ops.arg);
+
             // Free the node
             free(crt);
+            crt = next;
         }
     }
     // Free the buckets and the hash structure itself
