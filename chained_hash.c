@@ -115,9 +115,10 @@ static void ch_hash_grow(ch_hash *hash) {
         while(NULL!=crt) {
             // Finding the new bucket
             new_idx = crt->hash % new_capacity;
-            crt->next = new_buckets[new_idx];
-            new_buckets[new_idx] = crt;
+            ch_node *cur = crt;
             crt = crt->next;
+            cur->next = new_buckets[new_idx];
+            new_buckets[new_idx] = cur;
         }
     }
 
@@ -224,7 +225,7 @@ uint32_t ch_string_hash(const void *data, void *arg) {
         hash = ((hash << 5) + hash) + c;
     }
 
-    // // Finalizer
+    // Finalizer
     // hash ^= hash >> 16;
     // hash *= 0x85ebca6b;
     // hash ^= hash >> 13;
