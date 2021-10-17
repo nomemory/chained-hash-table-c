@@ -215,6 +215,13 @@ void ch_hash_print(ch_hash *hash, void (*print_key)(const void *k), void (*print
 
 // String operations
 
+static uint32_t ch_hash_fmix32(uint32_t h) {
+    h ^= h >> 16;
+    h *= 0x3243f6a9U;
+    h ^= h >> 16;
+    return h;
+}
+
 uint32_t ch_string_hash(const void *data, void *arg) {
     
     //djb2
@@ -225,14 +232,7 @@ uint32_t ch_string_hash(const void *data, void *arg) {
         hash = ((hash << 5) + hash) + c;
     }
 
-    // Finalizer
-    // hash ^= hash >> 16;
-    // hash *= 0x85ebca6b;
-    // hash ^= hash >> 13;
-    // hash *= 0xc2b2ae35;
-    // hash ^= hash >> 16;
-
-    return hash;
+    return ch_hash_fmix32(hash);
 }
 
 
