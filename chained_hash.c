@@ -72,7 +72,7 @@ static ch_node* ch_hash_get_node(ch_hash *hash, const void *key) {
 
     while(NULL!=crt) {
         // Iterated through the linked list to determine if the element is present
-        if (crt->hash == h && hash->val_ops.eq(crt->key, key, hash->val_ops.arg)) {
+        if (crt->hash == h && hash->key_ops.eq(crt->key, key, hash->val_ops.arg)) {
             result = crt;
             break;
         }
@@ -263,5 +263,5 @@ void ch_string_print(const void *data) {
     printf("%s", (const char*) data);
 }
 
-ch_key_ops ch_key_ops_string = { ch_string_hash, ch_string_cp, ch_string_free, NULL};
+ch_key_ops ch_key_ops_string = { ch_string_hash, ch_string_cp, ch_string_free, ch_string_eq, NULL};
 ch_val_ops ch_val_ops_string = { ch_string_cp, ch_string_free, ch_string_eq, NULL};

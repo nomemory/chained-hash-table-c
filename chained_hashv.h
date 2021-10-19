@@ -1,4 +1,10 @@
-#define CH_HASH_CAPACITY_INIT (32)
+#include <inttypes.h>
+#include <stddef.h>
+#include <stdbool.h>
+
+#include "vect.h"
+
+#define CH_HASH_CAPACITY_INIT (1024)
 #define CH_HASH_CAPACITY_MULT (2)
 #define CH_HASH_GROWTH (1)
 
@@ -21,39 +27,38 @@ typedef struct ch_node_s {
     uint32_t hash;
     void *key;
     void *val;
-    struct ch_node_s *next;
 } ch_node;
 
-typedef struct ch_hash_s {
+typedef struct ch_hashv_s {
     size_t capacity;
     size_t size;
-    ch_node **buckets;
+    ch_vect **buckets;
     ch_key_ops key_ops;
     ch_val_ops val_ops;
-} ch_hash;
+} ch_hashv;
 
 
 // Creates a new hash table
-ch_hash *ch_hash_new(ch_key_ops k_ops, ch_val_ops v_ops);
+ch_hashv *ch_hashv_new(ch_key_ops k_ops, ch_val_ops v_ops);
 
 // Free the memory associated with the hash (and all of its contents)
-void ch_hash_free(ch_hash *hash);
+void ch_hashv_free(ch_hashv *htable);
 
 // Gets the value coresponding to a key
 // If the key is not found returns NULL
-void* ch_hash_get(ch_hash *hash, const void *k);
+void* ch_hashv_get(ch_hashv *htable, const void *k);
 
 // Checks if a key exists or not in the hash table
-bool ch_hash_contains(ch_hash *hash, const void *k);
+bool ch_hashv_contains(ch_hashv *htable, const void *k);
 
 // Adds a <key, value> pair to the table
-void ch_hash_put(ch_hash *hash, const void *k, const void *v);
+void ch_hashv_put(ch_hashv *htable, const void *k, const void *v);
 
 // Prints the contents of the hash table 
-void ch_hash_print(ch_hash *hash, void (*print_key)(const void *k), void (*print_val)(const void *v));
+void ch_hashv_print(ch_hashv *htable, void (*print_key)(const void *k), void (*print_val)(const void *v));
 
 // Get the total number of collisions
-uint32_t ch_hash_numcol(ch_hash *hash);
+uint32_t ch_hashv_numcol(ch_hashv *hash);
 
 // String operations
 
